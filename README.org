@@ -1,0 +1,49 @@
+* Air Quality Index (AQI)
+
+The =aqi= package provides an interface to the World Air Quality Index.
+
+“The [[http://waqi.info/][World Air Quality Index]] project is a non-profit project started in 2007. Its mission is to promote air pollution awareness for citizens and provide a unified and world-wide air quality information. The project is providing transparent air quality information for more than 100 countries, covering more than 12,000 stations in 1000 major cities, via those two websites: [[https://aqicn.org][aqicn.org]] and [[https://waqi.info][waqi.info]].”
+
+“The Air Quality Index is based on measurement of particulate matter (PM2.5 and PM10), Ozone (O3), Nitrogen Dioxide (NO2), Sulfur Dioxide (SO2) and Carbon Monoxide (CO) emissions. Most of the stations on the map are monitoring both PM2.5 and PM10 data, but there are few exceptions where only PM10 is available.”
+
+Further information can be found on the [[https://waqi.info/][WAQI]] site, in particular the [[https://aqicn.org/sources/][sources & coverage]], [[http://aqicn.org/json-api/doc/][API docs]] and [[https://aqicn.org/faq/][FAQ]]. 
+
+* Installation, configuration and use
+
+The =aqi= package can be installed from [[https://melpa.org/][MELPA]] or manually via [[https://github.com/zzkt/aqi][github]].
+
+To access the WAQI project API it’s necessary to register at http://aqicn.org/data-platform/token/ and generate a key. Once you have your API key it can be configured via =use-package=, =M-x customize= or manually.
+
+#+BEGIN_SRC emacs-lisp
+(use-package aqi
+ :config (setq aqi-api-key "your-api-key“
+          aqi-use-cache t)
+#+END_SRC
+
+The simplest way to view AQI info is with =M-x aqi-report= which displays air quality info for your algorithmically derived location  (equivalent to the location ="here"=) or the name of a place. A place can be the name of a city (in which case the nearest monitoring station is used) or the name of specific monitoring station.
+
+#+BEGIN_SRC emacs-lisp
+(aqi-report "Taipei")
+#+END_SRC
+
+A detailed report is displayed by default and a single line summary can be provided by using the keyword ='brief=
+
+#+BEGIN_SRC emacs-lisp
+(aqi-report "Taipei" 'brief)
+#+END_SRC
+
+To use the data programmatically, the functions =aqi-report-full= and =aqi-report-brief= return the report as a string. The function =aqi-city-aqi= will return the AQI for a given city as a number.
+
+#+BEGIN_SRC emacs-lisp
+(aqi-city-aqi "Osaka")
+#+END_SRC
+
+There are macros that can be used to create accessors for specific data points from the city/station feed. For example,  =(aqi--make-city-raw-accessor 'aqi-station .attribution)= will create the function =aqi-station= which returns the =attribution= field as specified in the [[http://aqicn.org/json-api/doc/][API reference]].
+
+
+* Further
+
+  - [[https://en.wikipedia.org/wiki/Air_quality_index][Air Quality index (AQI)]] 
+  - [[https://www.who.int/health-topics/air-pollution][Air pollution]] and the [[https://www.who.int/airpollution/ambient/health-impacts/en/][health impacts of ambient air pollution]]
+  - [[https://create.arduino.cc/projecthub/projects/tags/air+quality][Arduino based air quality monitoring projects]]
+
