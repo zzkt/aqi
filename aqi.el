@@ -77,9 +77,9 @@
 
 (defun aqi--city-cache-update (city)
   "Add or update cached data for a given CITY."
-  (progn (aqi--city-cache-clear city)
-	 (push (cons city (aqi-request city))
-	       aqi-cached-data)))
+  (aqi--city-cache-clear city)
+  (push (cons city (aqi-request city))
+	aqi-cached-data))
 
 (defun aqi--city-cache-get (city)
   "Add or update cached data for a given CITY."
