@@ -1,4 +1,4 @@
-;;; aqi.el --- Air quality data from the World Air Quality Index. -*- lexical-binding: t; -*-
+;;; aqi.el --- Air quality data from the World Air Quality Index -*- lexical-binding: t; -*-
 
 ;; Copyright 2020 FoAM
 ;;
@@ -72,14 +72,14 @@
   "Clear the cached data, optionally only for a given CITY."
   (if city
       (setq aqi-cached-data
-	    (assq-delete-all city aqi-cached-data))
+            (assq-delete-all city aqi-cached-data))
     (setq aqi-cached-data '(("None" . "None")))))
 
 (defun aqi--city-cache-update (city)
   "Add or update cached data for a given CITY."
-  (progn (aqi--city-cache-clear city)
-	 (push (cons city (aqi-request city))
-	       aqi-cached-data)))
+  (aqi--city-cache-clear city)
+  (push (cons city (aqi-request city))
+        aqi-cached-data))
 
 (defun aqi--city-cache-get (city)
   "Add or update cached data for a given CITY."
@@ -97,16 +97,16 @@
 (defmacro aqi--make-city-raw-accessor (name aref)
   "Macro to create an accesor NAME with a 'let-alist' AREF (or function)."
   `(fset ,name
-	 (lambda (city)
-	   (aqi-request city)
-	   (let-alist (assoc-default city aqi-cached-data) ,aref))))
+         (lambda (city)
+           (aqi-request city)
+           (let-alist (assoc-default city aqi-cached-data) ,aref))))
 
 (defmacro aqi--make-city-format-accessor (name aref)
   "Macro to create an accesor NAME with a 'let-alist' AREF (or function)."
   `(fset ,name
-	 (lambda (city)
-	   (aqi-request city)
-	   (format "%s" (let-alist (assoc-default city aqi-cached-data) ,aref)))))
+         (lambda (city)
+           (aqi-request city)
+           (format "%s" (let-alist (assoc-default city aqi-cached-data) ,aref)))))
 
 ;; various accessors (added as needed...)
 
@@ -115,7 +115,7 @@
 
 ;; Function to return the coordinates of a city (by name) as a string
 (aqi--make-city-format-accessor 'aqi-city-lonlat
-				(format "%s, %s" (elt .city.geo 0) (elt .city.geo 1)))
+                                (format "%s, %s" (elt .city.geo 0) (elt .city.geo 1)))
 
 
 ;; API requests for AQI info
@@ -128,15 +128,15 @@
     :params `(("token" . ,aqi-api-key))
     :parser 'json-read
     :success (cl-function
-	      (lambda (&key data &allow-other-keys)
-		(pcase (assoc-default 'status data)
-		  ("ok" (push (cons city (assoc-default 'data data))
-			      aqi-cached-data))
-		  ("error" (push (cons city (format "Request error: %s" (assoc-default 'data data)))
-				 aqi-cached-data)))))
+              (lambda (&key data &allow-other-keys)
+                (pcase (assoc-default 'status data)
+                  ("ok" (push (cons city (assoc-default 'data data))
+                              aqi-cached-data))
+                  ("error" (push (cons city (format "Request error: %s" (assoc-default 'data data)))
+                                 aqi-cached-data)))))
     :error (cl-function
-	    (lambda (&rest args &key error-thrown &allow-other-keys)
-	      (message "WAQI error: %s" error-thrown)))))
+            (lambda (&rest args &key error-thrown &allow-other-keys)
+              (message "WAQI error: %s" error-thrown)))))
 
 (defun aqi-request-geo (latitude longitude)
   "Request details by LATITUDE and LONGITUDE from WAQI."
@@ -146,11 +146,11 @@
     :params `(("token" . ,aqi-api-key))
     :parser 'json-read
     :success (cl-function
-	      (lambda (&key data &allow-other-keys)
-		(message "200: %s" data)))
+              (lambda (&key data &allow-other-keys)
+                (message "200: %s" data)))
     :error (cl-function
-	    (lambda (&rest args &key error-thrown &allow-other-keys)
-	      (message "WAQI error: %s" error-thrown)))))
+            (lambda (&rest args &key error-thrown &allow-other-keys)
+              (message "WAQI error: %s" error-thrown)))))
 
 (defun aqi-request-cached (city)
   "Request details for CITY from cached data or direct from WAQI."
@@ -160,19 +160,19 @@
 
 (defun aqi-search (name)
   "Search for the nearest stations (if any) matching a given NAME."
- (request
+  (request
     (format "https://api.waqi.info/search/?keyword=%s&" name)
     :sync t
     :params `(("token" . ,aqi-api-key))
     :parser 'json-read
     :success (cl-function
-	      (lambda (&key data &allow-other-keys)
-		(pcase (assoc-default 'status data)
-		  ("ok" (message "Search: %s" (assoc-default 'data data)))
-		  ("error" (message "Search error: %s" (assoc-default 'data data))))))
+              (lambda (&key data &allow-other-keys)
+                (pcase (assoc-default 'status data)
+                  ("ok" (message "Search: %s" (assoc-default 'data data)))
+                  ("error" (message "Search error: %s" (assoc-default 'data data))))))
     :error (cl-function
-	    (lambda (&rest args &key error-thrown &allow-other-keys)
-	      (message "WAQI error: %s" error-thrown)))))
+            (lambda (&rest args &key error-thrown &allow-other-keys)
+              (message "WAQI error: %s" error-thrown)))))
 
 ;; printing, formatting and presenting.
 
@@ -180,28 +180,28 @@
 (defun aqi-report-brief (&optional place)
   "General air quality info from PLACE as a string."
   (let ((city (if (and (string< "" place) place) place "here")))
-  (if aqi-use-cache
-      (aqi-request-cached city)
-    (aqi-request city))
-  (let-alist (aqi--city-cache-get city)
-    (format "Air Quality Index in %s is %s and the dominant pollutant is %s%s"
-	    .city.name .aqi .dominentpol
-	    (if aqi-use-cache " (cached)" "")))))
+    (if aqi-use-cache
+        (aqi-request-cached city)
+      (aqi-request city))
+    (let-alist (aqi--city-cache-get city)
+      (format "Air Quality Index in %s is %s and the dominant pollutant is %s%s"
+              .city.name .aqi .dominentpol
+              (if aqi-use-cache " (cached)" "")))))
 
 ;;;###autoload
 (defun aqi-report-full (&optional place)
   "Detailed air quality info from PLACE as a string."
   (let ((city (if (and (string< "" place) place) place "here")))
-  (if aqi-use-cache
-      (aqi-request-cached city)
-    (aqi-request city))
-  (let ((data (aqi--city-cache-get city)))
-    ;; simple typecheck -> error handling since semantic errors are cached as strings.
-    (if (stringp data)
-	(format "%s (%s)" data city)
-      (let-alist data
-	(format
-	 "Air Quality index in %s is %s as of %s (UTC%s).
+    (if aqi-use-cache
+        (aqi-request-cached city)
+      (aqi-request city))
+    (let ((data (aqi--city-cache-get city)))
+      ;; simple typecheck -> error handling since semantic errors are cached as strings.
+      (if (stringp data)
+          (format "%s (%s)" data city)
+        (let-alist data
+          (format
+           "Air Quality index in %s is %s as of %s (UTC%s).
 \nDominant pollutant is %s
 PM2.5 (fine particulate matter): %s
 PM10 (respirable particulate matter): %s
@@ -213,38 +213,38 @@ Air pressure: %s
 Wind: %s
 \nFurther details can be found at %s
 \nData provided by %s and %s%s"
-	 .city.name
-	 .aqi
-	 .time.s
-	 .time.tz
-	 .dominentpol
-	 .iaqi.pm25.v
-	 .iaqi.pm10.v
-	 .iaqi.no2.v
-	 .iaqi.co.v
-	 .iaqi.t.v
-	 .iaqi.h.v
-	 .iaqi.p.v
-	 .iaqi.wg.v
-	 .city.url
-	 (let-alist (elt .attributions 0) .name)
-	 (let-alist (elt .attributions 1) .name)
-	 (if aqi-use-cache " (cached)" "")))))))
+           .city.name
+           .aqi
+           .time.s
+           .time.tz
+           .dominentpol
+           .iaqi.pm25.v
+           .iaqi.pm10.v
+           .iaqi.no2.v
+           .iaqi.co.v
+           .iaqi.t.v
+           .iaqi.h.v
+           .iaqi.p.v
+           .iaqi.wg.v
+           .city.url
+           (let-alist (elt .attributions 0) .name)
+           (let-alist (elt .attributions 1) .name)
+           (if aqi-use-cache " (cached)" "")))))))
 
 ;;;###autoload
 (defun aqi-report (&optional place type)
   "General air quality info from PLACE (or 'here' if no args are given) report TYPE can be 'brief' or 'full'."
   (interactive "sName of city or monitoring station (RET for \"here\"): ")
   (let* ((city (if (and (string< "" place) place) place "here"))
-	 (aqi-output (get-buffer-create (format "*Air Quality - %s*" city))))
+         (aqi-output (get-buffer-create (format "*Air Quality - %s*" city))))
     (with-current-buffer aqi-output
       (goto-char (point-min))
       (erase-buffer)
       (pcase type
-	('brief (insert (aqi-report-brief city)))
-	('full (insert (aqi-report-full city)))
+        ('brief (insert (aqi-report-brief city)))
+        ('full (insert (aqi-report-full city)))
         ('nil (insert (aqi-report-full city)))
-	(other (warn "Unknown report type: '%s. Try using 'full or 'brief" other)))
+        (other (warn "Unknown report type: '%s. Try using 'full or 'brief" other)))
       (goto-char (point-max))
       (insert ""))
     (display-buffer aqi-output))
