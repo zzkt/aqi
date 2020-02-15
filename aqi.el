@@ -1,4 +1,4 @@
-;;; aqi.el --- Air quality data from the World Air Quality Index. -*- lexical-binding: t; -*-
+;;; aqi.el --- Air quality data from the World Air Quality Index -*- lexical-binding: t; -*-
 
 ;; Copyright 2020 FoAM
 ;;
