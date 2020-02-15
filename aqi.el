@@ -160,7 +160,7 @@
 
 (defun aqi-search (name)
   "Search for the nearest stations (if any) matching a given NAME."
- (request
+  (request
     (format "https://api.waqi.info/search/?keyword=%s&" name)
     :sync t
     :params `(("token" . ,aqi-api-key))
@@ -180,28 +180,28 @@
 (defun aqi-report-brief (&optional place)
   "General air quality info from PLACE as a string."
   (let ((city (if (and (string< "" place) place) place "here")))
-  (if aqi-use-cache
-      (aqi-request-cached city)
-    (aqi-request city))
-  (let-alist (aqi--city-cache-get city)
-    (format "Air Quality Index in %s is %s and the dominant pollutant is %s%s"
-	    .city.name .aqi .dominentpol
-	    (if aqi-use-cache " (cached)" "")))))
+    (if aqi-use-cache
+	(aqi-request-cached city)
+      (aqi-request city))
+    (let-alist (aqi--city-cache-get city)
+      (format "Air Quality Index in %s is %s and the dominant pollutant is %s%s"
+	      .city.name .aqi .dominentpol
+	      (if aqi-use-cache " (cached)" "")))))
 
 ;;;###autoload
 (defun aqi-report-full (&optional place)
   "Detailed air quality info from PLACE as a string."
   (let ((city (if (and (string< "" place) place) place "here")))
-  (if aqi-use-cache
-      (aqi-request-cached city)
-    (aqi-request city))
-  (let ((data (aqi--city-cache-get city)))
-    ;; simple typecheck -> error handling since semantic errors are cached as strings.
-    (if (stringp data)
-	(format "%s (%s)" data city)
-      (let-alist data
-	(format
-	 "Air Quality index in %s is %s as of %s (UTC%s).
+    (if aqi-use-cache
+	(aqi-request-cached city)
+      (aqi-request city))
+    (let ((data (aqi--city-cache-get city)))
+      ;; simple typecheck -> error handling since semantic errors are cached as strings.
+      (if (stringp data)
+	  (format "%s (%s)" data city)
+	(let-alist data
+	  (format
+	   "Air Quality index in %s is %s as of %s (UTC%s).
 \nDominant pollutant is %s
 PM2.5 (fine particulate matter): %s
 PM10 (respirable particulate matter): %s
@@ -213,23 +213,23 @@ Air pressure: %s
 Wind: %s
 \nFurther details can be found at %s
 \nData provided by %s and %s%s"
-	 .city.name
-	 .aqi
-	 .time.s
-	 .time.tz
-	 .dominentpol
-	 .iaqi.pm25.v
-	 .iaqi.pm10.v
-	 .iaqi.no2.v
-	 .iaqi.co.v
-	 .iaqi.t.v
-	 .iaqi.h.v
-	 .iaqi.p.v
-	 .iaqi.wg.v
-	 .city.url
-	 (let-alist (elt .attributions 0) .name)
-	 (let-alist (elt .attributions 1) .name)
-	 (if aqi-use-cache " (cached)" "")))))))
+	   .city.name
+	   .aqi
+	   .time.s
+	   .time.tz
+	   .dominentpol
+	   .iaqi.pm25.v
+	   .iaqi.pm10.v
+	   .iaqi.no2.v
+	   .iaqi.co.v
+	   .iaqi.t.v
+	   .iaqi.h.v
+	   .iaqi.p.v
+	   .iaqi.wg.v
+	   .city.url
+	   (let-alist (elt .attributions 0) .name)
+	   (let-alist (elt .attributions 1) .name)
+	   (if aqi-use-cache " (cached)" "")))))))
 
 ;;;###autoload
 (defun aqi-report (&optional place type)
