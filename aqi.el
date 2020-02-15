@@ -158,6 +158,21 @@
       (aqi--city-cache-get city)
     (aqi-request city)))
 
+(defun aqi-search (name)
+  "Search for the nearest stations (if any) matching a given NAME."
+ (request
+    (format "https://api.waqi.info/search/?keyword=%s&" name)
+    :sync t
+    :params `(("token" . ,aqi-api-key))
+    :parser 'json-read
+    :success (cl-function
+	      (lambda (&key data &allow-other-keys)
+		(pcase (assoc-default 'status data)
+		  ("ok" (message "Search: %s" (assoc-default 'data data)))
+		  ("error" (message "Search error: %s" (assoc-default 'data data))))))
+    :error (cl-function
+	    (lambda (&rest args &key error-thrown &allow-other-keys)
+	      (message "WAQI error: %s" error-thrown)))))
 
 ;; printing, formatting and presenting.
 

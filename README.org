@@ -20,10 +20,16 @@ To access the WAQI project API it’s necessary to register at http://aqicn.org/
           aqi-use-cache t)
 #+END_SRC
 
-The simplest way to view AQI info is with =M-x aqi-report= which displays air quality info for your algorithmically derived location  (equivalent to the location ="here"=) or the name of a place. A place can be the name of a city (in which case the nearest monitoring station is used) or the name of specific monitoring station.
+The simplest way to view AQI info is with =M-x aqi-report= which displays air quality info for your algorithmically derived location  (equivalent to the location "here") or the name of a place. A place can be the name of a city (in which case the nearest monitoring station is used) or the id of specific monitoring station.
 
+By name…
 #+BEGIN_SRC emacs-lisp
-(aqi-report "Taipei")
+(aqi-report "Ulaanbaatar")
+#+END_SRC
+
+By id…
+#+BEGIN_SRC emacs-lisp
+(aqi-report "@7397")
 #+END_SRC
 
 A detailed report is displayed by default and a single line summary can be provided by using the keyword ='brief=
