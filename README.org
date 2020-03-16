@@ -1,5 +1,7 @@
 * Air Quality Index (AQI)
 
+    [[https://melpa.org/#/aqi][file:https://melpa.org/packages/aqi-badge.svg]]
+
 The =aqi= package provides an interface to the World Air Quality Index.
 
 “The [[http://waqi.info/][World Air Quality Index]] project is a non-profit project started in 2007. Its mission is to promote air pollution awareness for citizens and provide a unified and world-wide air quality information. The project is providing transparent air quality information for more than 100 countries, covering more than 12,000 stations in 1000 major cities, via those two websites: [[https://aqicn.org][aqicn.org]] and [[https://waqi.info][waqi.info]].”
