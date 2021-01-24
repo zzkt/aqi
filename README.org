@@ -8,11 +8,11 @@ The =aqi= package provides an interface to the World Air Quality Index.
 
 “The Air Quality Index is based on measurement of particulate matter (PM2.5 and PM10), Ozone (O3), Nitrogen Dioxide (NO2), Sulfur Dioxide (SO2) and Carbon Monoxide (CO) emissions. Most of the stations on the map are monitoring both PM2.5 and PM10 data, but there are few exceptions where only PM10 is available.”
 
-Further information can be found on the [[https://waqi.info/][WAQI]] site, in particular the [[https://aqicn.org/sources/][sources & coverage]], [[http://aqicn.org/json-api/doc/][API docs]] and [[https://aqicn.org/faq/][FAQ]]. 
+Further information can be found on the [[https://waqi.info/][WAQI]] site, in particular the [[https://aqicn.org/sources/][sources & coverage]], [[http://aqicn.org/json-api/doc/][API docs]] and [[https://aqicn.org/faq/][FAQ]].
 
 * Installation, configuration and use
 
-The =aqi= package can be installed from [[https://melpa.org/][MELPA]] or manually via [[https://github.com/zzkt/aqi][github]].
+The =aqi= package can be installed from [[https://melpa.org/#/aqi][MELPA]] or manually via [[https://github.com/zzkt/aqi][github]].
 
 To access the WAQI project API it’s necessary to register at http://aqicn.org/data-platform/token/ and generate a key. Once you have your API key it can be configured via =use-package=, =M-x customize= or manually.
 
@@ -51,7 +51,6 @@ There are macros that can be used to create accessors for specific data points f
 
 * Further
 
-  - [[https://en.wikipedia.org/wiki/Air_quality_index][Air Quality index (AQI)]] 
+  - [[https://en.wikipedia.org/wiki/Air_quality_index][Air Quality index (AQI)]]
   - [[https://www.who.int/health-topics/air-pollution][Air pollution]] and the [[https://www.who.int/airpollution/ambient/health-impacts/en/][health impacts of ambient air pollution]]
   - [[https://create.arduino.cc/projecthub/projects/tags/air+quality][Arduino based air quality monitoring projects]]
-
