@@ -57,11 +57,12 @@
 ;; Data from WAQI can be cached, since it's usually refreshed hourly.
 
 (defcustom aqi-use-cache nil
-  "When set to 't' will use cached data, otherwise get new data on each call."
+  "When set to t will use cached data, otherwise get new data on each call."
   :type 'boolean)
 
 (defcustom aqi-cache-refresh-period 0
-  "Cached data can be refreshed at a given interval (in minutes) or 'nil' to never refresh."
+  "Cached data can be refreshed at a given interval (in minutes).
+Set to nil to never refresh."
   :type 'number)
 
 (defvar aqi-cached-data '(("None" . "None"))
@@ -88,21 +89,21 @@
   (assoc-default city aqi-cached-data))
 
 (defun aqi--cached-city? (city)
-  "Return 't' if AQI data from CITY has been cached."
+  "Return t if AQI data from CITY has been cached."
   (if (assoc-default city aqi-cached-data) t nil))
 
 
 ;; data munging
 
 (defmacro aqi--make-city-raw-accessor (name aref)
-  "Macro to create an accesor NAME with a 'let-alist' AREF (or function)."
+  "Macro to create accessor NAME with binding `let-alist' AREF (or function)."
   `(fset ,name
          (lambda (city)
            (aqi-request city)
            (let-alist (assoc-default city aqi-cached-data) ,aref))))
 
 (defmacro aqi--make-city-format-accessor (name aref)
-  "Macro to create an accesor NAME with a 'let-alist' AREF (or function)."
+  "Macro to create accessor NAME with binding `let-alist' AREF (or function)."
   `(fset ,name
          (lambda (city)
            (aqi-request city)
