@@ -1,6 +1,6 @@
 * Air Quality Index (AQI)
 
-    [[https://melpa.org/#/aqi][file:https://melpa.org/packages/aqi-badge.svg]]
+ [[https://melpa.org/#/aqi][file:https://melpa.org/packages/aqi-badge.svg]]
 
 The =aqi= package provides an interface to the World Air Quality Index.
 
@@ -34,7 +34,7 @@ By id…
 (aqi-report "@7397")
 #+END_SRC
 
-A detailed report is displayed by default and a single line summary can be provided by using the keyword ='brief=
+A detailed report is displayed by default and a single line summary can be provided by using the keyword =brief=
 
 #+BEGIN_SRC emacs-lisp
 (aqi-report "Taipei" 'brief)

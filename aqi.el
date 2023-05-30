@@ -201,7 +201,25 @@
           (format "%s (%s)" data city)
         (let-alist data
           (format
-           "Air Quality index in %s is %s as of %s (UTC%s).
+           (if (fboundp 'org-mode)
+               ;; org mode formatted report
+               "* Air Quality index in %s is %s
+\nMost recent report at %s (UTC%s).\n
+| Dominant pollutant                   |   %s |
+| PM2.5 (fine particulate matter)      |   %s |
+| PM10 (respirable particulate matter) |   %s |
+| NO2 (Nitrogen Dioxide)               |   %s |
+| CO (Carbon Monoxide)                 |   %s |
+|                                      |    |
+| Temperature (Celsius)                |   %s |
+| Humidity                             |   %s |
+| Air pressure                         |   %s |
+| Wind                                 |   %s |
+\nFurther details can be found at [[%s][aqicn]].
+\nData provided by %s and %s%s"
+
+               ;; text mode
+               "Air Quality index in %s is %s as of %s (UTC%s).
 \nDominant pollutant is %s
 PM2.5 (fine particulate matter): %s
 PM10 (respirable particulate matter): %s
@@ -211,8 +229,9 @@ CO (Carbon Monoxide): %s
 Humidity: %s
 Air pressure: %s
 Wind: %s
-\nFurther details can be found at %s
-\nData provided by %s and %s%s"
+\nFurther details can be found at [[%s][aqicn]].
+\nData provided by %s and %s%s")
+
            .city.name
            .aqi
            .time.s
@@ -233,7 +252,8 @@ Wind: %s
 
 ;;;###autoload
 (defun aqi-report (&optional place type)
-  "General air quality info from PLACE (or 'here' if no args are given) report TYPE can be 'brief' or 'full'."
+  "General air quality info from PLACE (or `here' if no PLACE is given).
+Report TYPE can be `brief' or `full'."
   (interactive "sName of city or monitoring station (RET for \"here\"): ")
   (let* ((city (if (and (string< "" place) place) place "here"))
          (aqi-output (get-buffer-create (format "*Air Quality - %s*" city))))
@@ -246,7 +266,8 @@ Wind: %s
         ('nil (insert (aqi-report-full city)))
         (other (warn "Unknown report type: '%s. Try using 'full or 'brief" other)))
       (goto-char (point-max))
-      (insert ""))
+      (insert "")
+      (org-mode))
     (display-buffer aqi-output))
   t)
 
